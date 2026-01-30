@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحويل بيانات القرآن الكريم</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            max-width: 800px;
+            width: 100%;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 18px;
+        }
+
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .step-number {
+            position: absolute;
+            left: -20px;
+            top: 20px;
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .step h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 22px;
+        }
+
+        .step p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .drop-zone {
+            border: 3px dashed #667eea;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+
+        .drop-zone:hover {
+            background: #e9ecef;
+            border-color: #764ba2;
+        }
+
+        .drop-zone.highlight {
+            background: #e7f3ff;
+            border-color: #667eea;
+        }
+
+        .drop-zone-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+
+        .drop-zone-text {
+            font-size: 18px;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+
+        .features {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .features h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features li {
+            padding: 8px 0;
+            color: #666;
+        }
+
+        .features li::before {
+            content: "✅ ";
+            margin-left: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .step {
+                padding: 15px;
+            }
+
+            .step h2 {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🕌 أداة تحويل بيانات القرآن الكريم</h1>
+        <p class="subtitle">حول ملف TypeScript إلى JSON بسهولة</p>
+
+        <!-- Step 1: Download -->
+        <div class="step">
+            <div class="step-number">1</div>
+            <h2>الخطوة الأولى: تحميل ملف البيانات</h2>
+            <p>اضغط على الزر أدناه لتحميل ملف بيانات القرآن الكريم من مشروع DigitalKhatt:</p>
+            <a href="https://raw.githubusercontent.com/DigitalKhatt/digitalkhatt.org/master/ClientApp/src/app/services/quran_text_madina.ts" 
+               class="download-btn" 
+               download="quran_text_madina.ts">
+                📥 تحميل quran_text_madina.ts
+            </a>
+        </div>
+
+        <!-- Step 2: Convert -->
+        <div class="step">
+            <div class="step-number">2</div>
+            <h2>الخطوة الثانية: رفع الملف للتحويل</h2>
+            <p>اسحب الملف وأفلته هنا أو اضغط للاختيار:</p>
+            
+            <div class="drop-zone" id="dropZone">
+                <div class="drop-zone-icon">📁</div>
+                <div class="drop-zone-text">اسحب ملف quran_text_madina.ts هنا</div>
+                <p style="color: #999; font-size: 14px; margin-top: 10px;">أو اضغط للاختيار من جهازك</p>
+            </div>
+            
+            <input type="file" id="fileInput" class="file-input" accept=".ts">
+            
+            <div class="status" id="status"></div>
+        </div>
+
+        <!-- Step 3: Use -->
+        <div class="step">
+            <div class="step-number">3</div>
+            <h2>الخطوة الثالثة: استخدام المصحف</h2>
+            <p>بعد التحويل الناجح:</p>
+            <ol>
+                <li>سيتم تنزيل ملف <code>quran-data.json</code> تلقائياً</li>
+                <li>ضع الملف في نفس المجلد مع ملفات HTML</li>
+                <li>افتح <code>quran-mushaf.html</code> أو <code>quran-mushaf-customizable.html</code></li>
+                <li>استمتع بقراءة القرآن الكريم! 📖</li>
+            </ol>
+        </div>
+
+        <!-- Features -->
+        <div class="features">
+            <h3>✨ مميزات المصحف الرقمي</h3>
+            <ul>
+                <li>604 صفحة كاملة من المصحف الشريف</li>
+                <li>خط عربي جميل ومقروء</li>
+                <li>التنقل بين الصفحات بسهولة</li>
+                <li>فهرس كامل للسور</li>
+                <li>اختصارات لوحة المفاتيح</li>
+                <li>إمكانية التخصيص (النسخة المتقدمة)</li>
+                <li>يعمل بدون إنترنت بعد التحميل</li>
+                <li>متجاوب مع جميع الأجهزة</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const status = document.getElementById('status');
+
+        // Click handler - open file dialog
+        dropZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Highlight drop zone when dragging over it
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.add('highlight');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => {
+                dropZone.classList.remove('highlight');
+            }, false);
+        });
+
+        // Handle dropped files
+        dropZone.addEventListener('drop', (e) => {
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        }, false);
+
+        // Handle file input change
+        fileInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            handleFiles(files);
+        });
+
+        /**
+         * Process the dropped/selected files
+         */
+        function handleFiles(files) {
+            if (files.length === 0) {
+                return;
+            }
+
+            const file = files[0];
+
+            // Validate file extension
+            if (!file.name.endsWith('.ts')) {
+                showStatus('❌ الرجاء اختيار ملف TypeScript (.ts)', 'error');
+                return;
+            }
+
+            showStatus('⏳ جاري قراءة الملف...', 'info');
+
+            // Read file
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    const tsContent = e.target.result;
+
+                    showStatus('🔍 جاري استخراج البيانات...', 'info');
+
+                    // Extract the array using regex
+                    let match = tsContent.match(/export\s+const\s+quranText\s*=\s*(\[[\s\S]*\]);?/);
+                    if (!match) {
+                        match = tsContent.match(/let\s+quranText\s*=\s*(\[[\s\S]*\]);?/);
+                    }
+                    if (!match) {
+                        match = tsContent.match(/const\s+quranText\s*=\s*(\[[\s\S]*\]);?/);
+                    }
+
+                    if (!match) {
+                        throw new Error('لم يتم العثور على مصفوفة quranText في الملف');
+                    }
+
+                    const arrayContent = match[1];
+
+                    showStatus('✔️ جاري التحقق من صحة البيانات...', 'info');
+
+                    // Validate JSON
+                    const parsed = JSON.parse(arrayContent);
+                    
+                    if (!Array.isArray(parsed) || parsed.length === 0) {
+                        throw new Error('البيانات المستخرجة غير صالحة');
+                    }
+
+                    showStatus('💾 جاري إنشاء ملف JSON...', 'info');
+
+                    // Create Blob with the JSON data
+                    const blob = new Blob([arrayContent], { type: 'application/json' });
+                    const url = URL.createObjectURL(blob);
+
+                    // Create download link and trigger download
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'quran-data.json';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+
+                    // Calculate file size
+                    const fileSizeInMB = (blob.size / (1024 * 1024)).toFixed(2);
+
+                    // Show success message
+                    showStatus(
+                        `✅ تم التحويل بنجاح!<br><br>` +
+                        `📄 الملف: quran-data.json<br>` +
+                        `📊 الحجم: ${fileSizeInMB} ميجابايت<br>` +
+                        `📖 الصفحات: ${parsed.length}<br><br>` +
+                        `يمكنك الآن فتح quran-mushaf.html 🎉`,
+                        'success'
+                    );
+
+                } catch (error) {
+                    showStatus(`❌ خطأ في التحويل: ${error.message}`, 'error');
+                    console.error('Conversion error:', error);
+                }
+            };
+
+            reader.onerror = function() {
+                showStatus('❌ خطأ في قراءة الملف', 'error');
+            };
+
+            reader.readAsText(file);
+        }
+
+        /**
+         * Show status message
+         */
+        function showStatus(message, type) {
+            status.innerHTML = message;
+            status.className = 'status ' + type;
+            status.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

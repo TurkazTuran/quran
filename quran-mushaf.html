@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>القرآن الكريم - Mushaf</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Amiri Quran', 'Amiri', serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Navigation Bar */
+        .navigation {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        /* Buttons */
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-family: 'Amiri', serif;
+            transition: transform 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Page Input */
+        .page-input {
+            width: 80px;
+            padding: 10px;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 16px;
+            font-family: 'Amiri', serif;
+        }
+
+        /* Mushaf Page */
+        .mushaf-page {
+            background: linear-gradient(to bottom, #ffffff 0%, #f8f8f8 100%);
+            border: 3px solid #8B4513;
+            border-radius: 15px;
+            padding: 40px 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            min-height: 800px;
+            margin-bottom: 20px;
+        }
+
+        /* Surah Header */
+        .surah-header {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            border: 2px solid #667eea;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .surah-header::before {
+            content: "۞ ";
+            margin-left: 10px;
+        }
+
+        .surah-header::after {
+            content: " ۞";
+            margin-right: 10px;
+        }
+
+        /* Bismillah */
+        .bismillah {
+            text-align: center;
+            font-size: 36px;
+            color: #8B4513;
+            font-weight: bold;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Quran Text */
+        .quran-text {
+            font-size: 28px;
+            line-height: 2.8;
+            text-align: justify;
+            direction: rtl;
+            color: #000;
+            word-spacing: 5px;
+        }
+
+        /* Verse Numbers */
+        .verse-number {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            border: 2px solid #667eea;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 31px;
+            margin: 0 5px;
+            font-size: 18px;
+            background: white;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        /* Page Number Display */
+        .page-number-display {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea20 0%, #764ba220 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Surah Index */
+        .surah-index {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .surah-index.show {
+            display: block;
+        }
+
+        .surah-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .surah-item {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .surah-item:hover {
+            background: #667eea;
+            color: white;
+            transform: translateX(-5px);
+        }
+
+        /* Loading and Error States */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-size: 24px;
+            color: #667eea;
+        }
+
+        .error {
+            text-align: center;
+            padding: 50px;
+            font-size: 20px;
+            color: #dc3545;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .mushaf-page {
+                padding: 20px 15px;
+                min-height: 600px;
+            }
+
+            .quran-text {
+                font-size: 22px;
+                line-height: 2.5;
+            }
+
+            .surah-header {
+                font-size: 24px;
+                padding: 15px;
+            }
+
+            .bismillah {
+                font-size: 28px;
+            }
+
+            .verse-number {
+                width: 30px;
+                height: 30px;
+                line-height: 26px;
+                font-size: 16px;
+            }
+
+            .surah-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <div class="navigation">
+            <div>
+                <button onclick="prevPage()" id="prevBtn">→ السابقة</button>
+                <button onclick="nextPage()" id="nextBtn">التالية ←</button>
+            </div>
+            <div>
+                <input type="number" class="page-input" id="pageInput" min="1" max="604" placeholder="صفحة">
+                <button onclick="goToPage()">اذهب</button>
+            </div>
+            <button onclick="toggleIndex()">فهرس السور</button>
+        </div>
+
+        <!-- Surah Index -->
+        <div class="surah-index" id="surahIndex">
+            <div class="surah-grid" id="surahGrid"></div>
+        </div>
+
+        <!-- Mushaf Page -->
+        <div class="mushaf-page" id="mushafPage">
+            <div class="loading">جاري التحميل...</div>
+        </div>
+
+        <!-- Page Number Display -->
+        <div class="page-number-display" id="pageNumberDisplay"></div>
+    </div>
+
+    <script>
+        // Global variables
+        let quranData = null;
+        let currentPage = 1;
+
+        // Surah information with all 114 surahs and their starting pages
+        const surahInfo = [
+            { name: "الفاتحة", page: 1 },
+            { name: "البقرة", page: 2 },
+            { name: "آل عمران", page: 50 },
+            { name: "النساء", page: 77 },
+            { name: "المائدة", page: 106 },
+            { name: "الأنعام", page: 128 },
+            { name: "الأعراف", page: 151 },
+            { name: "الأنفال", page: 177 },
+            { name: "التوبة", page: 187 },
+            { name: "يونس", page: 208 },
+            { name: "هود", page: 221 },
+            { name: "يوسف", page: 235 },
+            { name: "الرعد", page: 249 },
+            { name: "إبراهيم", page: 255 },
+            { name: "الحجر", page: 262 },
+            { name: "النحل", page: 267 },
+            { name: "الإسراء", page: 282 },
+            { name: "الكهف", page: 293 },
+            { name: "مريم", page: 305 },
+            { name: "طه", page: 312 },
+            { name: "الأنبياء", page: 322 },
+            { name: "الحج", page: 332 },
+            { name: "المؤمنون", page: 342 },
+            { name: "النور", page: 350 },
+            { name: "الفرقان", page: 359 },
+            { name: "الشعراء", page: 367 },
+            { name: "النمل", page: 377 },
+            { name: "القصص", page: 385 },
+            { name: "العنكبوت", page: 396 },
+            { name: "الروم", page: 404 },
+            { name: "لقمان", page: 411 },
+            { name: "السجدة", page: 415 },
+            { name: "الأحزاب", page: 418 },
+            { name: "سبأ", page: 428 },
+            { name: "فاطر", page: 434 },
+            { name: "يس", page: 440 },
+            { name: "الصافات", page: 446 },
+            { name: "ص", page: 453 },
+            { name: "الزمر", page: 458 },
+            { name: "غافر", page: 467 },
+            { name: "فصلت", page: 477 },
+            { name: "الشورى", page: 483 },
+            { name: "الزخرف", page: 489 },
+            { name: "الدخان", page: 496 },
+            { name: "الجاثية", page: 499 },
+            { name: "الأحقاف", page: 502 },
+            { name: "محمد", page: 507 },
+            { name: "الفتح", page: 511 },
+            { name: "الحجرات", page: 515 },
+            { name: "ق", page: 518 },
+            { name: "الذاريات", page: 520 },
+            { name: "الطور", page: 523 },
+            { name: "النجم", page: 526 },
+            { name: "القمر", page: 528 },
+            { name: "الرحمن", page: 531 },
+            { name: "الواقعة", page: 534 },
+            { name: "الحديد", page: 537 },
+            { name: "المجادلة", page: 542 },
+            { name: "الحشر", page: 545 },
+            { name: "الممتحنة", page: 549 },
+            { name: "الصف", page: 551 },
+            { name: "الجمعة", page: 553 },
+            { name: "المنافقون", page: 554 },
+            { name: "التغابن", page: 556 },
+            { name: "الطلاق", page: 558 },
+            { name: "التحريم", page: 560 },
+            { name: "الملك", page: 562 },
+            { name: "القلم", page: 564 },
+            { name: "الحاقة", page: 566 },
+            { name: "المعارج", page: 568 },
+            { name: "نوح", page: 570 },
+            { name: "الجن", page: 572 },
+            { name: "المزمل", page: 574 },
+            { name: "المدثر", page: 575 },
+            { name: "القيامة", page: 577 },
+            { name: "الإنسان", page: 578 },
+            { name: "المرسلات", page: 580 },
+            { name: "النبأ", page: 582 },
+            { name: "النازعات", page: 583 },
+            { name: "عبس", page: 585 },
+            { name: "التكوير", page: 586 },
+            { name: "الانفطار", page: 587 },
+            { name: "المطففين", page: 587 },
+            { name: "الانشقاق", page: 589 },
+            { name: "البروج", page: 590 },
+            { name: "الطارق", page: 591 },
+            { name: "الأعلى", page: 591 },
+            { name: "الغاشية", page: 592 },
+            { name: "الفجر", page: 593 },
+            { name: "البلد", page: 594 },
+            { name: "الشمس", page: 595 },
+            { name: "الليل", page: 595 },
+            { name: "الضحى", page: 596 },
+            { name: "الشرح", page: 596 },
+            { name: "التين", page: 597 },
+            { name: "العلق", page: 597 },
+            { name: "القدر", page: 598 },
+            { name: "البينة", page: 598 },
+            { name: "الزلزلة", page: 599 },
+            { name: "العاديات", page: 599 },
+            { name: "القارعة", page: 600 },
+            { name: "التكاثر", page: 600 },
+            { name: "العصر", page: 601 },
+            { name: "الهمزة", page: 601 },
+            { name: "الفيل", page: 601 },
+            { name: "قريش", page: 602 },
+            { name: "الماعون", page: 602 },
+            { name: "الكوثر", page: 602 },
+            { name: "الكافرون", page: 603 },
+            { name: "النصر", page: 603 },
+            { name: "المسد", page: 603 },
+            { name: "الإخلاص", page: 604 },
+            { name: "الفلق", page: 604 },
+            { name: "الناس", page: 604 }
+        ];
+
+        /**
+         * Initialize the application
+         */
+        async function init() {
+            try {
+                // Load Quran data from JSON file
+                const response = await fetch('quran-data.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load Quran data');
+                }
+                quranData = await response.json();
+                
+                // Render first page and surah index
+                renderPage(currentPage);
+                renderSurahIndex();
+            } catch (error) {
+                document.getElementById('mushafPage').innerHTML = 
+                    '<div class="error">❌ خطأ في تحميل البيانات<br><br>الرجاء التأكد من وجود ملف quran-data.json في نفس المجلد</div>';
+                console.error('Error loading Quran data:', error);
+            }
+        }
+
+        /**
+         * Render a specific page
+         */
+        function renderPage(pageNum) {
+            // Check bounds
+            if (pageNum < 1 || pageNum > 604) {
+                return;
+            }
+
+            // Update current page
+            currentPage = pageNum;
+
+            // Get page data (pages are 0-indexed in array)
+            const pageData = quranData[pageNum - 1];
+            
+            if (!pageData) {
+                document.getElementById('mushafPage').innerHTML = 
+                    '<div class="error">❌ الصفحة غير موجودة</div>';
+                return;
+            }
+
+            let html = '';
+
+            // Check if this page starts a new surah
+            const surah = surahInfo.find(s => s.page === pageNum);
+            if (surah) {
+                html += `<div class="surah-header">سورة ${surah.name}</div>`;
+                
+                // Add Bismillah (except for Surah Al-Fatihah which has it in text, and At-Tawbah which doesn't have it)
+                const surahIndex = surahInfo.indexOf(surah);
+                if (surahIndex !== 0 && surahIndex !== 8) { // Not Al-Fatihah (0) or At-Tawbah (8)
+                    html += '<div class="bismillah">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</div>';
+                }
+            }
+
+            // Render lines with verse numbers
+            html += '<div class="quran-text">';
+            
+            // Process each line
+            pageData.forEach(line => {
+                if (typeof line === 'string') {
+                    // Replace verse markers with styled verse numbers
+                    let processedLine = line.replace(/۝(\d+)/g, (match, num) => {
+                        return `<span class="verse-number">${num}</span>`;
+                    });
+                    html += processedLine + ' ';
+                }
+            });
+            
+            html += '</div>';
+
+            // Update page content
+            document.getElementById('mushafPage').innerHTML = html;
+
+            // Update page number display
+            document.getElementById('pageNumberDisplay').textContent = `صفحة ${pageNum} من 604`;
+            
+            // Update page input
+            document.getElementById('pageInput').value = pageNum;
+
+            // Update button states
+            document.getElementById('prevBtn').disabled = pageNum === 1;
+            document.getElementById('nextBtn').disabled = pageNum === 604;
+        }
+
+        /**
+         * Render the surah index
+         */
+        function renderSurahIndex() {
+            const grid = document.getElementById('surahGrid');
+            let html = '';
+
+            surahInfo.forEach((surah, index) => {
+                html += `
+                    <div class="surah-item" onclick="goToSurah(${surah.page})">
+                        ${index + 1}. ${surah.name}
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        /**
+         * Toggle surah index visibility
+         */
+        function toggleIndex() {
+            const index = document.getElementById('surahIndex');
+            index.classList.toggle('show');
+        }
+
+        /**
+         * Go to a specific surah
+         */
+        function goToSurah(page) {
+            renderPage(page);
+            // Hide index after selection
+            document.getElementById('surahIndex').classList.remove('show');
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        /**
+         * Go to next page
+         */
+        function nextPage() {
+            if (currentPage < 604) {
+                renderPage(currentPage + 1);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        /**
+         * Go to previous page
+         */
+        function prevPage() {
+            if (currentPage > 1) {
+                renderPage(currentPage - 1);
+                window.scrollTo(0, 0);
+            }
+        }
+
+        /**
+         * Go to specific page from input
+         */
+        function goToPage() {
+            const input = document.getElementById('pageInput');
+            const page = parseInt(input.value);
+            
+            if (page >= 1 && page <= 604) {
+                renderPage(page);
+                window.scrollTo(0, 0);
+            } else {
+                alert('الرجاء إدخال رقم صفحة بين 1 و 604');
+            }
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                prevPage();
+            } else if (e.key === 'ArrowLeft') {
+                nextPage();
+            }
+        });
+
+        // Allow Enter key in page input
+        document.getElementById('pageInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                goToPage();
+            }
+        });
+
+        // Initialize when page loads
+        init();
+    </script>
+</body>
+</html>
