@@ -1,0 +1,20 @@
+# Source TypeScript file (users should download this themselves)
+quran_text_madina.ts
+
+# Node modules if any
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.log
